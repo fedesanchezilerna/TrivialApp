@@ -12,6 +12,11 @@ La aplicación deberá tener un estilo propio que debe seguirse a lo largo de la
 La aplicación constará de una única Activity.
 La aplicación utilizará la arquitectura MVVM.
 
+En total tendrán 30 preguntas. 10 por categoría de dificultad (Easy/Medium/Hard).
+1 respuesta correcta y 3 incorrectas por pregunta.
+
+## Wireframes
+
 ### Launch Screen
 Esta pantalla es lo que se llama Splash screen.
 Muestra una imagen de marca de tu aplicación antes de cargar la interfaz de usuario.
