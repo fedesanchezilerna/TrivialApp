@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.clase01"
+    namespace = "org.ilerna.trivialapp"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.clase01"
+        applicationId = "org.ilerna.trivialapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
