@@ -51,7 +51,7 @@ object QuestionProvider {
         ),
         Question(
             id = 7,
-            questionText = "¿Cómo se llama nuestra galaxia?",
+            questionText = "¿Cómo se llama nuestra galaxia?\n",
             options = listOf("Andrómeda", "Vía Láctea", "Galaxia Remolino", "Galaxia Sombrero"),
             correctAnswerIndex = 1,
             difficulty = "Easy"
@@ -65,7 +65,7 @@ object QuestionProvider {
         ),
         Question(
             id = 9,
-            questionText = "¿Qué es una supernova?",
+            questionText = "¿Qué es una supernova?\n",
             options = listOf("Un planeta nuevo", "Una estrella que explota", "Un cometa", "Un asteroide"),
             correctAnswerIndex = 1,
             difficulty = "Easy"
@@ -95,7 +95,7 @@ object QuestionProvider {
         ),
         Question(
             id = 13,
-            questionText = "¿Cuál es el nombre de la teoría que explica el origen del universo?",
+            questionText = "Nombre de la teoría que explica el origen del universo",
             options = listOf("Teoría Cuántica", "Big Bang", "Relatividad", "Evolución Estelar"),
             correctAnswerIndex = 1,
             difficulty = "Medium"
@@ -109,7 +109,7 @@ object QuestionProvider {
         ),
         Question(
             id = 15,
-            questionText = "¿Qué es un agujero negro?",
+            questionText = "¿Qué es un agujero negro?\n",
             options = listOf("Un planeta oscuro", "Una región con gravedad extrema", "Una nebulosa", "Un cometa"),
             correctAnswerIndex = 1,
             difficulty = "Medium"
@@ -123,7 +123,7 @@ object QuestionProvider {
         ),
         Question(
             id = 17,
-            questionText = "¿Qué es un año luz?",
+            questionText = "¿Qué es un año luz?\n",
             options = listOf("365 días en el espacio", "Una medida de tiempo", "Una medida de distancia", "La edad del universo"),
             correctAnswerIndex = 2,
             difficulty = "Medium"
@@ -160,14 +160,14 @@ object QuestionProvider {
         ),
         Question(
             id = 22,
-            questionText = "¿Qué porcentaje del universo está compuesto por materia oscura?",
+            questionText = "Porcentaje del universo compuesto por materia oscura",
             options = listOf("15%", "27%", "50%", "85%"),
             correctAnswerIndex = 1,
             difficulty = "Hard"
         ),
         Question(
             id = 23,
-            questionText = "¿Cuál es el nombre de la fuerza que acelera la expansión del universo?",
+            questionText = "Nombre de la fuerza que acelera la expansión del universo",
             options = listOf("Gravedad cuántica", "Energía oscura", "Fuerza nuclear fuerte", "Radiación cósmica"),
             correctAnswerIndex = 1,
             difficulty = "Hard"
@@ -209,14 +209,14 @@ object QuestionProvider {
         ),
         Question(
             id = 29,
-            questionText = "¿Qué es un magnetar?",
+            questionText = "¿Qué es un magnetar?\n",
             options = listOf("Un tipo de agujero negro", "Una estrella de neutrones con campo magnético extremo", "Un planeta magnético", "Una galaxia activa"),
             correctAnswerIndex = 1,
             difficulty = "Hard"
         ),
         Question(
             id = 30,
-            questionText = "¿Cuál es la paradoja de Fermi?",
+            questionText = "¿Cuál es la paradoja de Fermi?\n",
             options = listOf("La expansión acelerada del universo", "La ausencia de evidencia de vida extraterrestre", "La materia oscura invisible", "La curvatura del espacio-tiempo"),
             correctAnswerIndex = 1,
             difficulty = "Hard"
