@@ -52,8 +52,6 @@ fun GameScreen(
 
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var correctAnswers by remember { mutableIntStateOf(0) }
-    var selectedAnswer by remember { mutableIntStateOf(-1) }
-    var showResult by remember { mutableStateOf(false) }
 
     val currentQuestion = questions[currentQuestionIndex]
     val totalQuestions = questions.size
@@ -62,8 +60,6 @@ fun GameScreen(
 
     // Handle answer selection and navigation
     fun handleAnswerSelected(answerIndex: Int) {
-        selectedAnswer = answerIndex
-
         // Check if answer is correct
         if (answerIndex == currentQuestion.correctAnswerIndex) {
             correctAnswers++
@@ -72,7 +68,6 @@ fun GameScreen(
         // Move to next question or finish game
         if (currentQuestionIndex < totalQuestions - 1) {
             currentQuestionIndex++
-            selectedAnswer = -1
         } else {
             // Game finished
             onGameFinished(correctAnswers, totalQuestions)
