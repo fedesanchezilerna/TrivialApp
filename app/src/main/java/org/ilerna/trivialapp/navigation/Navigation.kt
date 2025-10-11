@@ -6,7 +6,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import org.ilerna.trivialapp.view.MenuScreen
-import org.ilerna.trivialapp.view.SplashScreen
 import org.ilerna.trivialapp.view.ResultScreen
 import org.ilerna.trivialapp.view.GameScreen
 
@@ -15,15 +14,8 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = SplashScreen
+        startDestination = MenuScreen
     ) {
-        composable<SplashScreen> {
-            SplashScreen {
-                navController.navigate(MenuScreen) {
-                    popUpTo<SplashScreen> { inclusive = true }
-                }
-            }
-        }
         composable<MenuScreen> {
             MenuScreen { difficulty ->
                 navController.navigate(GameScreen(difficulty))
