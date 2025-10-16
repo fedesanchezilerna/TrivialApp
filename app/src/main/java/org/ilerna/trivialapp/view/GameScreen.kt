@@ -17,10 +17,9 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,8 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ilerna.trivialapp.R
-import org.ilerna.trivialapp.model.QuestionProvider
+import org.ilerna.trivialapp.model.Question
+import org.ilerna.trivialapp.viewmodel.GameViewModel
+import org.ilerna.trivialapp.viewmodel.GameViewModelFactory
 
 @Composable
 fun GameScreen(
@@ -37,39 +39,26 @@ fun GameScreen(
     onGameFinished: (Int, Int) -> Unit, // (correctAnswers, totalQuestions)
     onBackToMenu: () -> Unit // Navigation back to menu
 ) {
-    // Get questions based on difficulty
-    val questions = remember {
-        when (difficulty) {
-            "Easy" -> QuestionProvider.getQuestionsByDifficultyRandomized("Easy").take(10)
-            "Medium" -> QuestionProvider.getQuestionsByDifficultyRandomized("Medium").take(10)
-            "Hard" -> QuestionProvider.getQuestionsByDifficultyRandomized("Hard").take(10)
-            "Random" -> QuestionProvider.getRandomQuestions(10)
-            "ALL" -> QuestionProvider.getAllQuestions().shuffled().take(30)
-            else -> QuestionProvider.getQuestionsByDifficultyRandomized("Easy").take(10)
-        }
-    }
+    val gameViewModel: GameViewModel = viewModel(
+        factory = GameViewModelFactory(difficulty)
+    )
 
-    var currentQuestionIndex by remember { mutableIntStateOf(0) }
-    var correctAnswers by remember { mutableIntStateOf(0) }
+    val currentQuestion: Question by gameViewModel.currentQuestion.observeAsState(
+        Question(0, "", emptyList(), 0, "")
+    )
+    val progress: Float by gameViewModel.progress.observeAsState(0f)
+    val currentRound: Int by gameViewModel.currentRound.observeAsState(1)
+    val gameFinished: Boolean by gameViewModel.gameFinished.observeAsState(false)
 
-    val currentQuestion = questions[currentQuestionIndex]
-    val totalQuestions = questions.size
-    val currentRound = currentQuestionIndex + 1
-    val progress = currentRound.toFloat() / totalQuestions.toFloat()
+    val totalQuestions = gameViewModel.totalQuestions
 
-    // Handle answer selection and navigation
-    fun handleAnswerSelected(answerIndex: Int) {
-        // Check if answer is correct
-        if (answerIndex == currentQuestion.correctAnswerIndex) {
-            correctAnswers++
-        }
-
-        // Move to next question or finish game
-        if (currentQuestionIndex < totalQuestions - 1) {
-            currentQuestionIndex++
-        } else {
-            // Game finished
-            onGameFinished(correctAnswers, totalQuestions)
+    // Handle game finished
+    LaunchedEffect(gameFinished) {
+        if (gameFinished) {
+            onGameFinished(
+                gameViewModel.getCorrectAnswersCount(),
+                gameViewModel.getTotalQuestionsCount()
+            )
         }
     }
 
@@ -120,12 +109,12 @@ fun GameScreen(
             ) {
                 AnswerButton(
                     text = currentQuestion.options[0],
-                    onClick = { handleAnswerSelected(0) },
+                    onClick = { gameViewModel.handleAnswerSelected(0) },
                     modifier = Modifier.weight(1f)
                 )
                 AnswerButton(
                     text = currentQuestion.options[1],
-                    onClick = { handleAnswerSelected(1) },
+                    onClick = { gameViewModel.handleAnswerSelected(1) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -137,12 +126,12 @@ fun GameScreen(
             ) {
                 AnswerButton(
                     text = currentQuestion.options[2],
-                    onClick = { handleAnswerSelected(2) },
+                    onClick = { gameViewModel.handleAnswerSelected(2) },
                     modifier = Modifier.weight(1f)
                 )
                 AnswerButton(
                     text = currentQuestion.options[3],
-                    onClick = { handleAnswerSelected(3) },
+                    onClick = { gameViewModel.handleAnswerSelected(3) },
                     modifier = Modifier.weight(1f)
                 )
             }

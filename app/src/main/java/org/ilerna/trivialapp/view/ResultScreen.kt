@@ -12,6 +12,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,7 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ilerna.trivialapp.R
+import org.ilerna.trivialapp.viewmodel.ResultViewModel
+import org.ilerna.trivialapp.viewmodel.ResultViewModelFactory
 
 @Composable
 fun ResultScreen(
@@ -29,6 +34,13 @@ fun ResultScreen(
     onShare: () -> Unit,
     onBackToMenu: () -> Unit
 ) {
+    val resultViewModel: ResultViewModel = viewModel(
+        factory = ResultViewModelFactory(correctAnswers, totalQuestions, difficulty)
+    )
+    
+    val resultTitle: String by resultViewModel.resultTitle.observeAsState("")
+    val scoreText: String by resultViewModel.scoreText.observeAsState("")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +59,7 @@ fun ResultScreen(
 
         // Result title
         Text(
-            text = "Resultado - Nivel $difficulty",
+            text = resultTitle,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -56,7 +68,7 @@ fun ResultScreen(
 
         // Score
         Text(
-            text = "$correctAnswers/$totalQuestions",
+            text = scoreText,
             style = MaterialTheme.typography.displayLarge,
             fontWeight = FontWeight.ExtraBold,
             textAlign = TextAlign.Center,

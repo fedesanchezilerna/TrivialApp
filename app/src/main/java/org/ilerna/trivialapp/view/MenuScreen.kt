@@ -17,9 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,20 +27,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ilerna.trivialapp.R
+import org.ilerna.trivialapp.viewmodel.MenuViewModel
 
 @Composable
 fun MenuScreen(navigateToGame: (String) -> Unit) {
-    var selectedDifficulty by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-
-    val difficultyOptions = listOf(
-        "Easy",
-        "Medium",
-        "Hard",
-        "Random",
-        "ALL"
-    )
+    val menuViewModel: MenuViewModel = viewModel()
+    
+    val selectedDifficulty: String by menuViewModel.selectedDifficulty.observeAsState("")
+    val dropdownExpanded: Boolean by menuViewModel.dropdownExpanded.observeAsState(false)
+    val isGameStartEnabled: Boolean by menuViewModel.isGameStartEnabled.observeAsState(false)
+    
+    val difficultyOptions = menuViewModel.getDifficultyOptions()
 
     Column(
         modifier = Modifier
@@ -85,22 +82,23 @@ fun MenuScreen(navigateToGame: (String) -> Unit) {
             Column {
                 TextField(
                     value = selectedDifficulty,
-                    onValueChange = { selectedDifficulty = it },
+                    onValueChange = { },
                     enabled = false,
                     readOnly = true,
                     label = { Text("Difficulty Level") },
-                    modifier = Modifier.clickable { expanded = true }
+                    modifier = Modifier.clickable { 
+                        menuViewModel.setDropdownExpanded(true) 
+                    }
                 )
                 DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    expanded = dropdownExpanded,
+                    onDismissRequest = { menuViewModel.setDropdownExpanded(false) }
                 ) {
                     difficultyOptions.forEach { difficulty ->
                         DropdownMenuItem(
                             text = { Text(difficulty) },
                             onClick = {
-                                selectedDifficulty = difficulty
-                                expanded = false
+                                menuViewModel.onDifficultySelected(difficulty)
                             }
                         )
                     }
@@ -110,7 +108,7 @@ fun MenuScreen(navigateToGame: (String) -> Unit) {
             // Start Game Button
             Button(
                 onClick = { navigateToGame(selectedDifficulty) },
-                enabled = selectedDifficulty.isNotBlank()
+                enabled = isGameStartEnabled
             ) {
                 Text(
                     text = "Start Game",
