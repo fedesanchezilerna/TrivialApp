@@ -17,7 +17,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -40,7 +39,7 @@ fun GameScreen(
     onBackToMenu: () -> Unit // Navigation back to menu
 ) {
     val gameViewModel: GameViewModel = viewModel(
-        factory = GameViewModelFactory(difficulty)
+        factory = GameViewModelFactory(difficulty, onGameFinished)
     )
 
     val currentQuestion: Question by gameViewModel.currentQuestion.observeAsState(
@@ -48,22 +47,8 @@ fun GameScreen(
     )
     val progress: Float by gameViewModel.progress.observeAsState(0f)
     val currentRound: Int by gameViewModel.currentRound.observeAsState(1)
-    val gameFinished: Boolean by gameViewModel.gameFinished.observeAsState(false)
 
     val totalQuestions = gameViewModel.totalQuestions
-
-    /**
-     * LaunchedEffect to handle the game finished.
-     * If the game is finished, call the onGameFinished with the correct answers and total questions.
-     */
-    LaunchedEffect(gameFinished) {
-        if (gameFinished) {
-            onGameFinished(
-                gameViewModel.getCorrectAnswersCount(),
-                gameViewModel.getTotalQuestionsCount()
-            )
-        }
-    }
 
     Column(
         modifier = Modifier

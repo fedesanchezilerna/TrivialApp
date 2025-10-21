@@ -9,7 +9,10 @@ import org.ilerna.trivialapp.model.QuestionProvider
  * ViewModel for the game screen.
  * Handles the game logic and data.
  */
-class GameViewModel(private val difficulty: String) : ViewModel() {
+class GameViewModel(
+    private val difficulty: String,
+    private val onGameFinished: (Int, Int) -> Unit
+) : ViewModel() {
     
     /**
      * Questions to be used in the game.
@@ -32,10 +35,7 @@ class GameViewModel(private val difficulty: String) : ViewModel() {
     
     private val _currentQuestion = MutableLiveData<Question>(questions.first())
     val currentQuestion = _currentQuestion
-    
-    private val _gameFinished = MutableLiveData<Boolean>(false)
-    val gameFinished = _gameFinished
-    
+
     private val _progress = MutableLiveData<Float>(1f / questions.size.toFloat())
     val progress = _progress
     
@@ -83,16 +83,11 @@ class GameViewModel(private val difficulty: String) : ViewModel() {
             updateCurrentQuestion()
         } else {
             // Game finished
-            _gameFinished.value = true
+            onGameFinished(
+                _correctAnswers.value ?: 0,
+                totalQuestions
+            )
         }
-    }
-    
-    fun getCorrectAnswersCount(): Int {
-        return _correctAnswers.value ?: 0
-    }
-    
-    fun getTotalQuestionsCount(): Int {
-        return totalQuestions
     }
     
     fun getDifficulty(): String {

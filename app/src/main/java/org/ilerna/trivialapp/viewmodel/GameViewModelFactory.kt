@@ -8,11 +8,12 @@ import androidx.lifecycle.ViewModelProvider
  * Used to create the GameViewModel with the difficulty.
  */
 class GameViewModelFactory(
-    private val difficulty: String
+    private val difficulty: String,
+    private val onGameFinished: (Int, Int) -> Unit
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GameViewModel::class.java)) {
-            return GameViewModel(difficulty) as T
+            return GameViewModel(difficulty, onGameFinished) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
