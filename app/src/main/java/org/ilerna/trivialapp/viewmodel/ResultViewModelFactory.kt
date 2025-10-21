@@ -3,6 +3,10 @@ package org.ilerna.trivialapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
+/**
+ * Factory for creating ResultViewModel instances.
+ * Used to create the ResultViewModel with the correct answers, total questions and difficulty.
+ */
 class ResultViewModelFactory(
     private val correctAnswers: Int,
     private val totalQuestions: Int,

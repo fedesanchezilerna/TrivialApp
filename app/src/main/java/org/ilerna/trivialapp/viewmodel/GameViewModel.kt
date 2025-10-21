@@ -5,10 +5,16 @@ import androidx.lifecycle.ViewModel
 import org.ilerna.trivialapp.model.Question
 import org.ilerna.trivialapp.model.QuestionProvider
 
-class GameViewModel(
-    private val difficulty: String
-) : ViewModel() {
+/**
+ * ViewModel for the game screen.
+ * Handles the game logic and data.
+ */
+class GameViewModel(private val difficulty: String) : ViewModel() {
     
+    /**
+     * Questions to be used in the game.
+     * Depending on the difficulty, the questions are selected from the QuestionProvider.
+     */
     private val questions = when (difficulty) {
         "Easy" -> QuestionProvider.getQuestionsByDifficultyRandomized("Easy").take(10)
         "Medium" -> QuestionProvider.getQuestionsByDifficultyRandomized("Medium").take(10)
@@ -38,10 +44,16 @@ class GameViewModel(
     
     val totalQuestions = questions.size
     
+    /**
+     * Initialize the game by updating the current question.
+     */
     init {
         updateCurrentQuestion()
     }
     
+    /**
+     * Update the current question by incrementing the index and updating the current question.
+     */
     private fun updateCurrentQuestion() {
         val index = _currentQuestionIndex.value ?: 0
         if (index < questions.size) {
@@ -51,6 +63,11 @@ class GameViewModel(
         }
     }
     
+    /**
+     * Handle the answer selected by the user.
+     * Check if the answer is correct and update the correct answers count.
+     * Move to the next question or finish the game if the last question is reached.
+     */
     fun handleAnswerSelected(answerIndex: Int) {
         val currentIndex = _currentQuestionIndex.value ?: 0
         val currentQ = questions[currentIndex]

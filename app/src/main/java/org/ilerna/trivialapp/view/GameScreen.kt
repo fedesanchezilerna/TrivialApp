@@ -52,7 +52,10 @@ fun GameScreen(
 
     val totalQuestions = gameViewModel.totalQuestions
 
-    // Handle game finished
+    /**
+     * LaunchedEffect to handle the game finished.
+     * If the game is finished, call the onGameFinished with the correct answers and total questions.
+     */
     LaunchedEffect(gameFinished) {
         if (gameFinished) {
             onGameFinished(
