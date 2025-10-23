@@ -21,7 +21,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,11 +33,11 @@ import org.ilerna.trivialapp.viewmodel.MenuViewModel
 @Composable
 fun MenuScreen(navigateToGame: (String) -> Unit) {
     val menuViewModel: MenuViewModel = viewModel()
-    
+
     val selectedDifficulty: String by menuViewModel.selectedDifficulty.observeAsState("")
     val dropdownExpanded: Boolean by menuViewModel.dropdownExpanded.observeAsState(false)
     val isGameStartEnabled: Boolean by menuViewModel.isGameStartEnabled.observeAsState(false)
-    
+
     val difficultyOptions = menuViewModel.getDifficultyOptions()
 
     Column(
@@ -51,8 +50,8 @@ fun MenuScreen(navigateToGame: (String) -> Unit) {
         // Title
         Text(
             text = "Universe Trivia",
-            style = TextStyle(
-                fontWeight = FontWeight.ExtraBold,
+            style = MaterialTheme.typography.displaySmall.copy(
+                fontWeight = FontWeight.Black,
                 fontSize = 36.sp
             ),
             textAlign = TextAlign.Center
@@ -86,8 +85,8 @@ fun MenuScreen(navigateToGame: (String) -> Unit) {
                     enabled = false,
                     readOnly = true,
                     label = { Text("Difficulty Level") },
-                    modifier = Modifier.clickable { 
-                        menuViewModel.setDropdownExpanded(true) 
+                    modifier = Modifier.clickable {
+                        menuViewModel.setDropdownExpanded(true)
                     }
                 )
                 DropdownMenu(
