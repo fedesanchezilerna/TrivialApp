@@ -1,17 +1,20 @@
 package org.ilerna.trivialapp.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import org.ilerna.trivialapp.view.GameScreen
 import org.ilerna.trivialapp.view.MenuScreen
 import org.ilerna.trivialapp.view.ResultScreen
-import org.ilerna.trivialapp.view.GameScreen
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = MenuScreen
@@ -26,7 +29,13 @@ fun Navigation() {
             GameScreen(
                 difficulty = gameScreen.difficulty,
                 onGameFinished = { correctAnswers, totalQuestions ->
-                    navController.navigate(ResultScreen(correctAnswers, totalQuestions, gameScreen.difficulty)) {
+                    navController.navigate(
+                        ResultScreen(
+                            correctAnswers,
+                            totalQuestions,
+                            gameScreen.difficulty
+                        )
+                    ) {
                         popUpTo<GameScreen> { inclusive = true }
                     }
                 },
@@ -44,7 +53,14 @@ fun Navigation() {
                 totalQuestions = resultScreen.totalQuestions,
                 difficulty = resultScreen.difficulty,
                 onShare = {
-                    // TODO: Implementar funcion share
+                    val shareText =
+                        "Puntaje final :) \n${resultScreen.correctAnswers}/${resultScreen.totalQuestions}"
+                    val shareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                        type = "text/plain"
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, "Compartir puntaje"))
                 },
                 onBackToMenu = {
                     navController.navigate(MenuScreen) {
